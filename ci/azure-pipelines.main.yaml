@@ -90,7 +90,7 @@ stages:
         kubeconfig: $(kubeconfig)
         namespace: $(namespace)
 
-    - template: certificates/letsencrypt/tls-client-certificate@ci_templates
+    - template: certificates/letsencrypt/tls-client-certificate.yaml@ci_templates
       parameters:
         kubeconfig: $(kubeconfig)
         namespace: $(namespace)
