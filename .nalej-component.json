@@ -8,6 +8,9 @@
   "image_list": [
     "authx"
   ],
+  "component_list": [
+    "authx"
+  ],
   "tools": [
     "k8s",
     "docker"
