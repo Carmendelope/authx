@@ -10,7 +10,7 @@ resources:
       type: github
       name: nalej/ci-templates
       endpoint: nalej
-      ref: refs/heads/feature/NP-2460_Update_Certificate_template
+      ref: refs/tags/v1.0.5
 
 stages:
 - stage: 'SlackStart'
