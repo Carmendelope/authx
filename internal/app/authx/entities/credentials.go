@@ -27,6 +27,8 @@ type BasicCredentialsData struct {
 	RoleID string
 	// OrganizationID is the assigned organization.
 	OrganizationID string
+	// LastLogin is the timestamp of the last login of a user
+	LastLogin int64
 }
 
 // NewBasicCredentialsData creates an instance of BasicCredentialsData.
@@ -39,10 +41,11 @@ func NewBasicCredentialsData(username string, password []byte, roleID string, or
 	}
 }
 
-// EditBasicCredentialsData is an object that allows to edit the credetentials record.
+// EditBasicCredentialsData is an object that allows to edit the credentials record.
 type EditBasicCredentialsData struct {
-	Password *[]byte
-	RoleID   *string
+	Password  *[]byte
+	RoleID    *string
+	LastLogin int64
 }
 
 // WithPassword allows to change the password.

@@ -99,6 +99,9 @@ func (p *BasicCredentialsMockup) Edit(username string, edit *entities.EditBasicC
 	if edit.Password != nil {
 		data.Password = *edit.Password
 	}
+	if edit.LastLogin != 0 {
+		data.LastLogin = edit.LastLogin
+	}
 
 	p.data[username] = *data
 	return nil

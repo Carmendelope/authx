@@ -8,7 +8,7 @@ metadata:
 data:
   authx-scylla.cql: |
     create KEYSPACE IF NOT EXISTS authx WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
-    create table IF NOT EXISTS authx.credentials (username text, password blob, role_id text, organization_id text, PRIMARY KEY (username));
+    create table IF NOT EXISTS authx.credentials (username text, password blob, role_id text, organization_id text, last_login bigint, PRIMARY KEY (username));
     create table IF NOT EXISTS authx.roles (organization_id text, role_id text, name text, internal boolean, primitives list<text>, PRIMARY KEY (organization_id, role_id));
     create table IF NOT EXISTS authx.tokens (username text, token_id text, refresh_token blob, expiration_date bigint, PRIMARY KEY (username, token_id));
     create table IF NOT EXISTS authx.deviceTokens (device_id text, token_id text, refresh_token text, expiration_date bigint, organization_id text, device_group_id text, PRIMARY KEY (device_id, token_id));
