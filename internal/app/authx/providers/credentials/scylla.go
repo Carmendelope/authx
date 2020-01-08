@@ -254,7 +254,6 @@ func (sp *ScyllaCredentialsProvider) Edit(username string, edit *entities.EditBa
 	q := gocqlx.Query(sp.Session.Query(stmt), names).BindStruct(data)
 	cqlErr := q.ExecRelease()
 
-	log.Debug().Interface("edit request", edit).Msg("full edit request")
 
 	if cqlErr != nil {
 		return derrors.AsError(cqlErr, "cannot update credentials")
