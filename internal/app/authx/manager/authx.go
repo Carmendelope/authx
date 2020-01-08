@@ -134,8 +134,22 @@ func (m *Authx) LoginWithBasicCredentials(username string, password string) (*pb
 
 		return nil, err
 	}
+
 	response := &pbAuthx.LoginResponse{Token: gToken.Token, RefreshToken: gToken.RefreshToken}
+
+	err = m.SetLastLoginTimestamp(username)
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
+}
+
+func (m *Authx) SetLastLoginTimestamp(username string) derrors.Error {
+	loginData := &entities.EditBasicCredentialsData{
+		LastLogin: time.Now().UnixNano(),
+	}
+	return m.CredentialsProvider.Edit(username, loginData)
 }
 
 func (m *Authx) ChangePassword(username string, password string, newPassword string) derrors.Error {

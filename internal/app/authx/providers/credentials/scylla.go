@@ -185,7 +185,7 @@ func (sp *ScyllaCredentialsProvider) Add(credentials *entities.BasicCredentialsD
 	}
 
 	// add new basic credential
-	stmt, names := qb.Insert(table).Columns("username", "password", "role_id", "organization_id").ToCql()
+	stmt, names := qb.Insert(table).Columns("username", "password", "role_id", "organization_id", "last_login").ToCql()
 	q := gocqlx.Query(sp.Session.Query(stmt), names).BindStruct(credentials)
 	cqlErr := q.ExecRelease()
 
@@ -245,10 +245,15 @@ func (sp *ScyllaCredentialsProvider) Edit(username string, edit *entities.EditBa
 	if edit.Password != nil {
 		data.Password = *edit.Password
 	}
+	if edit.LastLogin != 0 {
+		data.LastLogin = edit.LastLogin
+	}
+
 	// update
-	stmt, names := qb.Update(table).Set("password", "role_id", "organization_id").Where(qb.Eq(tablePK)).ToCql()
+	stmt, names := qb.Update(table).Set("password", "role_id", "organization_id", "last_login").Where(qb.Eq(tablePK)).ToCql()
 	q := gocqlx.Query(sp.Session.Query(stmt), names).BindStruct(data)
 	cqlErr := q.ExecRelease()
+
 
 	if cqlErr != nil {
 		return derrors.AsError(cqlErr, "cannot update credentials")
