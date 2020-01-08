@@ -149,7 +149,7 @@ func (m *Authx) SetLastLoginTimestamp(username string) derrors.Error {
 	loginData := &entities.EditBasicCredentialsData{
 		LastLogin: time.Now().UnixNano(),
 	}
-	err := m.CredentialsProvider.Edit(username, loginData)
+	return m.CredentialsProvider.Edit(username, loginData)
 }
 
 func (m *Authx) ChangePassword(username string, password string, newPassword string) derrors.Error {
