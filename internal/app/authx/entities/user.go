@@ -27,7 +27,6 @@ func (u *UserAuthxInfo) ToGRPC() *grpc_authx_go.UserAuthxInfo {
 	return &grpc_authx_go.UserAuthxInfo{
 		OrganizationId: u.OrganizationID,
 		RoleId:         u.RoleID,
-		RoleName:       u.RoleName,
 		InternalRole:   u.InternalRole,
 		RolePrimitives: primitives,
 		LastLogin:      u.LastLogin,
