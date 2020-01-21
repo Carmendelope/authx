@@ -39,6 +39,28 @@ func NewRoleData(organizationID string, roleID string, name string, internal boo
 	}
 }
 
+// UserAuthxInfo contains information about an authx user
+type UserAuthxInfo struct {
+	OrganizationID string
+	RoleID         string
+	RoleName       string
+	InternalRole   bool
+	Primitives     []string
+	LastLogin      int64
+}
+
+// NewUserAuthxInfo creates a new instance of the structure.
+func NewUserAuthxInfo(organizationID string, roleId string, roleName string, internalRole bool, primitives []string, lastLogin int64) *UserAuthxInfo {
+	return &UserAuthxInfo{
+		OrganizationID: organizationID,
+		RoleID:         roleId,
+		RoleName:       roleName,
+		InternalRole:   internalRole,
+		Primitives:     primitives,
+		LastLogin:      lastLogin,
+	}
+}
+
 func PrimitiveToGRPC(name string) grpc_authx_go.AccessPrimitive {
 	switch name {
 	case grpc_authx_go.AccessPrimitive_ORG.String():

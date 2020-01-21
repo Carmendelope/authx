@@ -202,13 +202,26 @@ func (h *Authx) ListRoles(ctx context.Context, organizationID *grpc_organization
 	}, nil
 }
 
-// Retrieve the role associated with a user.
+// GetUserRole retrieves the role associated with a user.
 func (h *Authx) GetUserRole(ctx context.Context, userID *grpc_user_go.UserId) (*grpc_authx_go.Role, error) {
 	vErr := entities.ValidUserID(userID)
 	if vErr != nil {
 		return nil, conversions.ToGRPCError(vErr)
 	}
 	retrieved, err := h.Manager.GetUserRole(userID)
+	if err != nil {
+		return nil, conversions.ToGRPCError(err)
+	}
+	return retrieved.ToGRPC(), nil
+}
+
+//
+func (h *Authx) GetUserAuthxInfo(ctx context.Context, userId *grpc_user_go.UserId) (*grpc_authx_go.UserAuthxInfo, error) {
+	vErr := entities.ValidUserID(userId)
+	if vErr != nil {
+		return nil, conversions.ToGRPCError(vErr)
+	}
+	retrieved, err := h.Manager.GetUserAuthxInfo(userId)
 	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}
