@@ -225,7 +225,6 @@ func (m *Authx) GetUserAuthxInfo(userId *grpc_user_go.UserId) (*entities.UserAut
 	return &entities.UserAuthxInfo{
 		OrganizationID: cred.OrganizationID,
 		RoleID:         cred.RoleID,
-		RoleName:       cred.RoleID,
 		InternalRole:   role.Internal,
 		Primitives:     role.Primitives,
 		LastLogin:      cred.LastLogin,

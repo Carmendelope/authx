@@ -43,18 +43,16 @@ func NewRoleData(organizationID string, roleID string, name string, internal boo
 type UserAuthxInfo struct {
 	OrganizationID string
 	RoleID         string
-	RoleName       string
 	InternalRole   bool
 	Primitives     []string
 	LastLogin      int64
 }
 
 // NewUserAuthxInfo creates a new instance of the structure.
-func NewUserAuthxInfo(organizationID string, roleId string, roleName string, internalRole bool, primitives []string, lastLogin int64) *UserAuthxInfo {
+func NewUserAuthxInfo(organizationID string, roleId string, internalRole bool, primitives []string, lastLogin int64) *UserAuthxInfo {
 	return &UserAuthxInfo{
 		OrganizationID: organizationID,
 		RoleID:         roleId,
-		RoleName:       roleName,
 		InternalRole:   internalRole,
 		Primitives:     primitives,
 		LastLogin:      lastLogin,
