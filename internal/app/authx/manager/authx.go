@@ -217,6 +217,22 @@ func (m *Authx) GetUserRole(userID *grpc_user_go.UserId) (*entities.RoleData, de
 	return m.RoleProvider.Get(userID.OrganizationId, cred.RoleID)
 }
 
+func (m *Authx) GetUserAuthxInfo(userId *grpc_user_go.UserId) (*entities.UserAuthxInfo, derrors.Error) {
+	cred, err := m.CredentialsProvider.Get(userId.Email)
+	if err != nil {
+		return nil, err
+	}
+	role, err := m.RoleProvider.Get(userId.OrganizationId, cred.RoleID)
+	return &entities.UserAuthxInfo{
+		OrganizationID: cred.OrganizationID,
+		RoleID:         cred.RoleID,
+		RoleName:       cred.RoleID,
+		InternalRole:   role.Internal,
+		Primitives:     role.Primitives,
+		LastLogin:      cred.LastLogin,
+	}, err
+}
+
 // Clean removes all the data.
 func (m *Authx) Clean() derrors.Error {
 	err := m.Token.Clean()
