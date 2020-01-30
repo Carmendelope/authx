@@ -143,20 +143,20 @@
   version = "v0.0.16"
 
 [[projects]]
-  digest = "1:df9e23c02c051e28a0cec619deabe18a17c43776114537449eb743947d3ba491"
+  digest = "1:f19603cee15362462522d5e3a93dd99edabce50480f6a4f26dbc6e53ce4d79db"
   name = "github.com/nalej/grpc-authx-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "340e66ad6f0251791d435c995ffaea3c58d8ad25"
-  version = "v0.0.56"
+  revision = "04d9be7ca966185935373d3a3309b6e8b8a9af37"
+  version = "v0.0.57"
 
 [[projects]]
-  digest = "1:210df68e1c67fff8a3c4f85542d4319b8165e19be37165c1b99a7c4f57323204"
+  digest = "1:ec7b9f9c85968243421662a15887513225c64a0cd5aefc12c72266ce4b9e109b"
   name = "github.com/nalej/grpc-cluster-api-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "486cb8047f9b7a9c3cff9b6530ed691aad16305b"
-  version = "v0.0.24"
+  revision = "17fdc94847cb6136b41d11622cf4f9395502b240"
+  version = "v0.0.25"
 
 [[projects]]
   digest = "1:bfdcc9fecc93209e8571fbc3df0899fe1bc89337783871809b85b9fe96888c61"
@@ -199,12 +199,12 @@
   version = "v0.0.9"
 
 [[projects]]
-  digest = "1:7fc4c91efb526a01aaf052185a890e4d2550ed5cc2462afde4570430af6c908a"
+  digest = "1:c90a5f65260f06d45249fae0fd5de66ffdfcd77037b436e65f1051afc42972af"
   name = "github.com/nalej/grpc-device-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d46b8a04cde4e3406f26f00ca9d1e095ff70ff96"
-  version = "v0.0.38"
+  revision = "d89c6434d8647a6d36c6fa61637c09ff701a0b28"
+  version = "v0.0.39"
 
 [[projects]]
   digest = "1:8a0b7494a015eb451cf7254574dfde31f4ab00f17e8bdda6c16c58622b80820b"
@@ -223,12 +223,12 @@
   version = "v0.0.31"
 
 [[projects]]
-  digest = "1:fa6ff6c0dada7afa336d4918f44e9ce885033f6ebf12d8932a6ba3be58100584"
+  digest = "1:a2fc8e99e16d358011df8f878b3284428fb505489baaa6d287354371f09c6f35"
   name = "github.com/nalej/grpc-login-api-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "abb892245138e45baea8677ba99f8d236bb2d6f8"
-  version = "v0.0.22"
+  revision = "4c637e0b1b8e04eacfc9827b22f0b6cf491eb217"
+  version = "v0.0.23"
 
 [[projects]]
   digest = "1:9d50e4f6e5778f73977f2a6195b4f45ab14cfdeaa58641e51f176705c4432c24"

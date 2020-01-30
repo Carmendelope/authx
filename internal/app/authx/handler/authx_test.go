@@ -164,8 +164,6 @@ var _ = ginkgo.Describe("Applications", func() {
 		roleID := "r1"
 		roleID2 := "r2"
 		pass := "MyLittlePassword"
-		badPass := "bad"
-
 		ginkgo.BeforeEach(func() {
 			role := &pbAuthx.Role{
 				OrganizationId: organizationID,
@@ -216,7 +214,7 @@ var _ = ginkgo.Describe("Applications", func() {
 		ginkgo.It("should change password with correct password", func() {
 			newPassword := pass + "New"
 			response, err := client.ChangePassword(context.Background(),
-				&pbAuthx.ChangePasswordRequest{Username: userName, Password: pass, NewPassword: newPassword})
+				&pbAuthx.ChangePasswordRequest{Username: userName, NewPassword: newPassword})
 			gomega.Expect(err).To(gomega.Succeed())
 			gomega.Expect(response).NotTo(gomega.BeNil())
 
@@ -225,29 +223,11 @@ var _ = ginkgo.Describe("Applications", func() {
 			gomega.Expect(err).To(gomega.Succeed())
 			gomega.Expect(loginResponse).NotTo(gomega.BeNil())
 		})
-		ginkgo.It("should not change password with incorrect password", func() {
-			newPassword := pass + "New"
-			response, err := client.ChangePassword(context.Background(),
-				&pbAuthx.ChangePasswordRequest{Username: userName, Password: pass + "wrong", NewPassword: newPassword})
-
-			gomega.Expect(err).To(gomega.HaveOccurred())
-			gomega.Expect(status.Convert(err).Code()).Should(gomega.Equal(codes.Unauthenticated))
-			gomega.Expect(response).To(gomega.BeNil())
-		})
-		ginkgo.It("should not change password with invalid password", func() {
-			newPassword := pass + "New"
-			response, err := client.ChangePassword(context.Background(),
-				&pbAuthx.ChangePasswordRequest{Username: userName, Password: badPass, NewPassword: newPassword})
-
-			gomega.Expect(err).To(gomega.HaveOccurred())
-			gomega.Expect(status.Convert(err).Code()).Should(gomega.Equal(codes.Unauthenticated))
-			gomega.Expect(response).To(gomega.BeNil())
-		})
 
 		ginkgo.It("should not change password with incorrect username", func() {
 			newPassword := pass + "New"
 			response, err := client.ChangePassword(context.Background(),
-				&pbAuthx.ChangePasswordRequest{Username: userName + "wrong", Password: pass, NewPassword: newPassword})
+				&pbAuthx.ChangePasswordRequest{Username: userName + "wrong", NewPassword: newPassword})
 
 			gomega.Expect(err).To(gomega.HaveOccurred())
 			gomega.Expect(response).To(gomega.BeNil())
