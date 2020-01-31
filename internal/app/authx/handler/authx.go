@@ -87,9 +87,6 @@ func (h *Authx) ChangePassword(ctx context.Context, request *pbAuthx.ChangePassw
 	if request.Username == "" {
 		return nil, conversions.ToGRPCError(derrors.NewInvalidArgumentError("username is mandatory"))
 	}
-	if request.Password == "" {
-		return nil, conversions.ToGRPCError(derrors.NewInvalidArgumentError("password is mandatory"))
-	}
 
 	if request.NewPassword == "" {
 		return nil, conversions.ToGRPCError(derrors.NewInvalidArgumentError("newPassword is mandatory"))
@@ -98,7 +95,7 @@ func (h *Authx) ChangePassword(ctx context.Context, request *pbAuthx.ChangePassw
 		return nil, err
 	}
 
-	err := h.Manager.ChangePassword(request.Username, request.Password, request.NewPassword)
+	err := h.Manager.ChangePassword(request.Username, request.NewPassword)
 	if err != nil {
 		return nil, conversions.ToGRPCError(err)
 	}

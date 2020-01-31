@@ -129,23 +129,10 @@ var _ = ginkgo.Describe("Authx", func() {
 			err := manager.DeleteCredentials(userName + "wrong")
 			gomega.Expect(err).To(gomega.HaveOccurred())
 		})
-		ginkgo.It("should change password with correct password", func() {
-			newPassword := pass + "New"
-			err := manager.ChangePassword(userName, pass, newPassword)
-			gomega.Expect(err).To(gomega.Succeed())
-			response, err := manager.LoginWithBasicCredentials(userName, newPassword)
-			gomega.Expect(err).To(gomega.Succeed())
-			gomega.Expect(response).NotTo(gomega.BeNil())
-		})
-		ginkgo.It("should change password with correct incorrect password", func() {
-			newPassword := pass + "New"
-			err := manager.ChangePassword(userName, pass+"wrong", newPassword)
-			gomega.Expect(err).To(gomega.HaveOccurred())
-		})
 
 		ginkgo.It("should change password with correct incorrect username", func() {
 			newPassword := pass + "New"
-			err := manager.ChangePassword(userName+"wrong", pass, newPassword)
+			err := manager.ChangePassword(userName+"wrong", newPassword)
 			gomega.Expect(err).To(gomega.HaveOccurred())
 		})
 

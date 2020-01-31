@@ -152,15 +152,7 @@ func (m *Authx) SetLastLoginTimestamp(username string) derrors.Error {
 	return m.CredentialsProvider.Edit(username, loginData)
 }
 
-func (m *Authx) ChangePassword(username string, password string, newPassword string) derrors.Error {
-	credentials, err := m.CredentialsProvider.Get(username)
-	if err != nil {
-		return err
-	}
-	err = m.Password.CompareHashAndPassword(credentials.Password, password)
-	if err != nil {
-		return err
-	}
+func (m *Authx) ChangePassword(username string, newPassword string) derrors.Error {
 	hashedPassword, err := m.Password.GenerateHashedPassword(newPassword)
 	if err != nil {
 		return err
