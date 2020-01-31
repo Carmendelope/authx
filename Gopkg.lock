@@ -23,7 +23,7 @@
   revision = "95d072f1b5bbc604ce10f41ce1c914578592ed00"
 
 [[projects]]
-  digest = "1:e3839df32927e8d3403cd5aa7253d966e8ff80fc8f10e2e35d146461cd83fcfa"
+  digest = "1:4e9aec9688230a647e19254691efcab09dfe6bb8f6c76d853e1cef1751458215"
   name = "github.com/golang/protobuf"
   packages = [
     "descriptor",
@@ -38,8 +38,8 @@
     "ptypes/wrappers",
   ]
   pruneopts = "UT"
-  revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
-  version = "v1.3.2"
+  revision = "d23c5127dc24889085f8ccea5c9d560a57a879d8"
+  version = "v1.3.3"
 
 [[projects]]
   digest = "1:e4f5819333ac698d294fe04dbf640f84719658d5c7ce195b10060cc37292ce79"
@@ -58,7 +58,7 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:c560cd79300fac84f124b96225181a637a70b60155919a3c36db50b7cca6b806"
+  digest = "1:2062a7216f40b843d1478e69bcce5ed3e32eab9f3f02f8387fd178455748a244"
   name = "github.com/grpc-ecosystem/grpc-gateway"
   packages = [
     "internal",
@@ -66,8 +66,8 @@
     "utilities",
   ]
   pruneopts = "UT"
-  revision = "f7120437bb4f6c71f7f5076ad65a45310de2c009"
-  version = "v1.12.1"
+  revision = "e16fcd495a18ea01dbc6f5b6ac2956a94e1981a2"
+  version = "v1.12.2"
 
 [[projects]]
   branch = "master"
@@ -143,12 +143,12 @@
   version = "v0.0.16"
 
 [[projects]]
-  digest = "1:f19603cee15362462522d5e3a93dd99edabce50480f6a4f26dbc6e53ce4d79db"
+  digest = "1:41cd15014152e83ec39755d87bc17fce427b9838b47dee240c95d52fb88b04e3"
   name = "github.com/nalej/grpc-authx-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "04d9be7ca966185935373d3a3309b6e8b8a9af37"
-  version = "v0.0.57"
+  revision = "d7d13db9ea4ee252c780fde1bc20b0a8f38a3c03"
+  version = "v0.0.58"
 
 [[projects]]
   digest = "1:ec7b9f9c85968243421662a15887513225c64a0cd5aefc12c72266ce4b9e109b"
@@ -239,12 +239,12 @@
   version = "v0.0.46"
 
 [[projects]]
-  digest = "1:c9cd58c67d04f0f88775b783d7b98d873e941608f5feb43643286e996f3b2800"
+  digest = "1:86e2a30b544c2698d6d01fe7e1aca24f95847955e68e79a708d8630ce99aad1c"
   name = "github.com/nalej/grpc-organization-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "db43aba4f994f9c1b4740ff1c6126c636d5f5dd0"
-  version = "v0.0.34"
+  revision = "ed59dc9b5531417b1fb89cadcda8bca82eaca0c7"
+  version = "v0.0.35"
 
 [[projects]]
   digest = "1:1484cd83e8c3d27270fa4054e54c590749bf503afe41708b3d3cf01cc36da57a"
@@ -386,7 +386,7 @@
     "blowfish",
   ]
   pruneopts = "UT"
-  revision = "530e935923ad688be97c15eeb8e5ee42ebf2b54a"
+  revision = "69ecbb4d6d5dab05e49161c6e77ea40a030884e1"
 
 [[projects]]
   branch = "master"
@@ -409,11 +409,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:46aee4748419921a611e49842c732b3b8afe6a0926017ad1a68b9d0e11fdd288"
+  digest = "1:fea09edda033799f8e99ab9042bda910bf1e3bf088c03eaf2ba8aba3adbbc8bf"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "34d275377bf96a094e8d5b0c61750ddd54cd6b36"
+  revision = "9fbb57f87de9ccfe3a99d4e3270ce8a926ebba4f"
 
 [[projects]]
   digest = "1:28deae5fe892797ff37a317b5bcda96d11d1c90dadd89f1337651df3bc4c586e"
@@ -465,7 +465,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1649cdfae6c73e96f7e7b410681823b8a2888aaed490d4b63517d12b21839314"
+  digest = "1:e7667ed80e06bc3a2fe6d5b26c4fe96b11f640e19d815a2b328d4f3a2c51d021"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
@@ -475,10 +475,10 @@
     "protobuf/field_mask",
   ]
   pruneopts = "UT"
-  revision = "32f20d992d240fbca6ef7dec6c05d1f024314e02"
+  revision = "58ce757ed39bbbe3bf3960b90ded218031b35389"
 
 [[projects]]
-  digest = "1:a8b7f0b40dd538c9706c284dceb29640cc0cbb57e176ff72cd393b3b0186bedc"
+  digest = "1:57cda324f18c854b83d85123777499a7cb43b08e864147ab7267e17630f0eea6"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -522,8 +522,8 @@
     "test/bufconn",
   ]
   pruneopts = "UT"
-  revision = "f5b0812e6fe574d90da76b205e9eb51f6ddb1919"
-  version = "v1.26.0"
+  revision = "a89bee78ddf0f67f27c06b1b2b1b071c18408724"
+  version = "v1.27.0"
 
 [[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
@@ -551,12 +551,12 @@
   revision = "dd632973f1e7218eb1089048e0798ec9ae7dceb8"
 
 [[projects]]
-  digest = "1:b75b3deb2bce8bc079e16bb2aecfe01eb80098f5650f9e93e5643ca8b7b73737"
+  digest = "1:55b110c99c5fdc4f14930747326acce56b52cfce60b24b1c03ef686ac0e46bb1"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   pruneopts = "UT"
-  revision = "1f64d6156d11335c3f22d9330b0ad14fc1e789ce"
-  version = "v2.2.7"
+  revision = "53403b58ad1b561927d19068c655246f2db79d48"
+  version = "v2.2.8"
 
 [solve-meta]
   analyzer-name = "dep"
