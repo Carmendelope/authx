@@ -22,12 +22,44 @@ import (
 	"github.com/nalej/grpc-authx-go"
 )
 
+// MonitoringCertificate represents the certificate info that is stored.
+type MonitoringCertificate struct {
+	// OrganizationId which the certificate belongs to.
+	OrganizationId string
+	// CertificateId
+	CertificateId string
+	// CreationTimestamp
+	CreationTimestamp int64
+	// ExpirationTimestamp
+	ExpirationTimestamp int64
+	// RevocationTimestamp
+	RevocationTimestamp int64
+}
+
+// NewMonitoringCertificate creates a new Certificate info object.
+func NewMonitoringCertificate(organizationId string, certificateId string, creationTimestamp int64, expirationTimestamp int64, revocationTimestamp int64) *MonitoringCertificate {
+	return &MonitoringCertificate{
+		OrganizationId:      organizationId,
+		CertificateId:       certificateId,
+		CreationTimestamp:   creationTimestamp,
+		ExpirationTimestamp: expirationTimestamp,
+		RevocationTimestamp: revocationTimestamp,
+	}
+}
+
 func ValidEdgeControllerCertRequest(request *grpc_authx_go.EdgeControllerCertRequest) derrors.Error {
 	if request.OrganizationId == "" {
 		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
 	if request.EdgeControllerId == "" {
 		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+	}
+	return nil
+}
+
+func ValidateCreateMonitoringClientCertificateRequest(request *grpc_authx_go.CreateMonitoringClientCertificateRequest) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
 	}
 	return nil
 }
