@@ -282,6 +282,14 @@
   version = "v1.5.0"
 
 [[projects]]
+  digest = "1:6c17d8ac39911c27554bcce1e5e23422e6823ffafea51d6f03ef0d7483241f69"
+  name = "github.com/nalej/scylladb-utils"
+  packages = ["pkg/scylladb"]
+  pruneopts = "UT"
+  revision = "cae342686621a83c010e4a9e10a8c49623d67b04"
+  version = "v0.1.0"
+
+[[projects]]
   digest = "1:89a071f4773bd23b5f03a31653b05dfe8cb708254aeb34d4cdb9651a4ddcbd6d"
   name = "github.com/onsi/ginkgo"
   packages = [
@@ -351,15 +359,15 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:4315fb96af8c39b45f008dc7f50000c6aac6b86fe1a778a93566bfe550ffcfe6"
+  digest = "1:0637fe77aa80b179f33639ba827563369158dae6681d8e7960a0b45d9daf659f"
   name = "github.com/scylladb/gocqlx"
   packages = [
     ".",
     "qb",
   ]
   pruneopts = "UT"
-  revision = "0f06ab790c6f98f04cce4e14daf04864588ee2c7"
-  version = "v1.3.3"
+  revision = "8b6f083cdc7cd91a46a27752c5a5cd2a7a6e1a30"
+  version = "v1.3.1"
 
 [[projects]]
   digest = "1:e096613fb7cf34743d49af87d197663cfccd61876e2219853005a57baedfa562"
@@ -577,6 +585,7 @@
     "github.com/nalej/grpc-user-go",
     "github.com/nalej/grpc-utils/pkg/conversions",
     "github.com/nalej/grpc-utils/pkg/test",
+    "github.com/nalej/scylladb-utils/pkg/scylladb",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
     "github.com/rs/zerolog",
