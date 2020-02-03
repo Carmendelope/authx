@@ -83,6 +83,15 @@ func (ch *CertHelper) SignCertificate(request *x509.Certificate) ([]byte, *rsa.P
 	return cert, priv, nil
 }
 
+func (ch *CertHelper) GetCaCertPEM() (string, derrors.Error) {
+	out := &bytes.Buffer{}
+	err := pem.Encode(out, &pem.Block{Type: "CERTIFICATE", Bytes: ch.CACert.Raw})
+	if err != nil {
+		return "", derrors.AsError(err, "cannot transform CaCert to PEM")
+	}
+	return out.String(), nil
+}
+
 // GeneratePEM
 func (ch *CertHelper) GeneratePEM(rawCert []byte, privateKey *rsa.PrivateKey) (*grpc_authx_go.PEMCertificate, derrors.Error) {
 	// Export the content to PEM

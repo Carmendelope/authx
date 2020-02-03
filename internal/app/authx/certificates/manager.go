@@ -139,12 +139,16 @@ func (m *Manager) CreateMonitoringClientCertificate(request *grpc_authx_go.Creat
 		return nil, err
 	}
 
+	caCertPEM, err := m.helper.GetCaCertPEM()
+	if err != nil {
+		return nil, err
+	}
 	return &grpc_authx_go.CreateMonitoringClientCertificateResponse{
 		OrganizationId:    request.OrganizationId,
 		CertificateId:     certificateId,
 		ExpirationTime:    certificatex509.NotAfter.UnixNano(),
 		ClientCertificate: clientCertificatePEM,
-		CaCertificate:     "a", //m.helper.CACert.PublicKey, // TODO what to put here exactly and why?
+		CaCertificate:     caCertPEM,
 	}, nil
 }
 
