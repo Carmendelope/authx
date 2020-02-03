@@ -23,16 +23,15 @@ import (
 	"github.com/scylladb/gocqlx"
 	"github.com/scylladb/gocqlx/qb"
 	"sync"
-	"time"
 )
 
-type MonitoringCertificatesScyllaProvider struct {
+type CertificatesMonitoringScyllaProvider struct {
 	sync.Mutex
 	scylladb.ScyllaDB
 }
 
-func NewMonitoringCertificatesScyllaProvider(address string, port int, keySpace string) *MonitoringCertificatesScyllaProvider {
-	provider := MonitoringCertificatesScyllaProvider{
+func NewCertificatesMonitoringScyllaProvider(address string, port int, keySpace string) *CertificatesMonitoringScyllaProvider {
+	provider := CertificatesMonitoringScyllaProvider{
 		ScyllaDB: scylladb.ScyllaDB{
 			Address:  address,
 			Port:     port,
@@ -43,7 +42,7 @@ func NewMonitoringCertificatesScyllaProvider(address string, port int, keySpace 
 	return &provider
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) Disconnect() {
+func (sp *CertificatesMonitoringScyllaProvider) Disconnect() {
 	sp.Lock()
 	defer sp.Unlock()
 	sp.ScyllaDB.Disconnect()
@@ -63,7 +62,7 @@ var updateableColumns = []string{
 	"revocation_timestamp",
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) createPkMap(organizationId string, certificateId string) map[string]interface{} {
+func (sp *CertificatesMonitoringScyllaProvider) createPkMap(organizationId string, certificateId string) map[string]interface{} {
 	return map[string]interface{}{
 		"organization_id": organizationId,
 		"certificate_id":  certificateId,
@@ -71,14 +70,14 @@ func (sp *MonitoringCertificatesScyllaProvider) createPkMap(organizationId strin
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-func (sp *MonitoringCertificatesScyllaProvider) Add(certificate *entities.MonitoringCertificate) derrors.Error {
+func (sp *CertificatesMonitoringScyllaProvider) Add(certificate *entities.MonitoringCertificate) derrors.Error {
 	sp.Lock()
 	defer sp.Unlock()
 	pkComposite := sp.createPkMap(certificate.OrganizationId, certificate.CertificateId)
 	return sp.UnsafeCompositeAdd(table, pkComposite, columns, certificate)
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) Get(organizationId string, certificateId string) (*entities.MonitoringCertificate, derrors.Error) {
+func (sp *CertificatesMonitoringScyllaProvider) Get(organizationId string, certificateId string) (*entities.MonitoringCertificate, derrors.Error) {
 	sp.Lock()
 	defer sp.Unlock()
 	pkComposite := sp.createPkMap(organizationId, certificateId)
@@ -89,7 +88,7 @@ func (sp *MonitoringCertificatesScyllaProvider) Get(organizationId string, certi
 	return result.(*entities.MonitoringCertificate), nil
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) List(organizationId string) ([]*entities.MonitoringCertificate, derrors.Error) {
+func (sp *CertificatesMonitoringScyllaProvider) List(organizationId string) ([]*entities.MonitoringCertificate, derrors.Error) {
 	sp.Lock()
 	defer sp.Unlock()
 
@@ -111,19 +110,14 @@ func (sp *MonitoringCertificatesScyllaProvider) List(organizationId string) ([]*
 	return connections, nil
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) Revoke(organizationId string, certificateId string) derrors.Error {
+func (sp *CertificatesMonitoringScyllaProvider) Update(toUpdate *entities.MonitoringCertificate) derrors.Error {
 	sp.Lock()
 	defer sp.Unlock()
-	revoked := entities.MonitoringCertificate{
-		OrganizationId:      organizationId,
-		CertificateId:       certificateId,
-		RevocationTimestamp: time.Now().UnixNano(),
-	}
-	pkComposite := sp.createPkMap(organizationId, certificateId)
-	return sp.UnsafeCompositeUpdate(table, pkComposite, updateableColumns, revoked)
+	pkComposite := sp.createPkMap(toUpdate.OrganizationId, toUpdate.CertificateId)
+	return sp.UnsafeCompositeUpdate(table, pkComposite, updateableColumns, toUpdate)
 }
 
-func (sp *MonitoringCertificatesScyllaProvider) Truncate() derrors.Error {
+func (sp *CertificatesMonitoringScyllaProvider) Truncate() derrors.Error {
 	sp.Lock()
 	defer sp.Unlock()
 	return sp.UnsafeClear([]string{table})

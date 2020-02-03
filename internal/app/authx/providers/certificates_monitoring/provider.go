@@ -30,8 +30,8 @@ type CertificatesMonitoring interface {
 	Get(organizationId string, certificateId string) (*entities.MonitoringCertificate, derrors.Error)
 	// List all the monitoring certificates of the organization.
 	List(organizationId string) ([]*entities.MonitoringCertificate, derrors.Error)
-	// Revoke a specific monitoring certificate.
-	Revoke(organizationId string, certificateId string) derrors.Error
+	// Update a specific monitoring certificate.
+	Update(toUpdate *entities.MonitoringCertificate) derrors.Error
 	// Truncate cleans all the records of monitoring certificates.
 	Truncate() derrors.Error
 }

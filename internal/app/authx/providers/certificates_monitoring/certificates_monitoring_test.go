@@ -135,7 +135,8 @@ func CertificatesMonitoringTests(provider CertificatesMonitoring) {
 			}
 			gomega.Expect(provider.Add(addedCertificate)).To(gomega.Succeed())
 
-			gomega.Expect(provider.Revoke(addedCertificate.OrganizationId, addedCertificate.CertificateId)).
+			addedCertificate.RevocationTimestamp = time.Now().UnixNano()
+			gomega.Expect(provider.Update(addedCertificate)).
 				To(gomega.Succeed())
 
 			revokedCertificate, err := provider.Get(addedCertificate.OrganizationId, addedCertificate.CertificateId)
@@ -152,9 +153,16 @@ func CertificatesMonitoringTests(provider CertificatesMonitoring) {
 			}
 			gomega.Expect(provider.Add(addedCertificate)).To(gomega.Succeed())
 
-			gomega.Expect(provider.Revoke(uuid.New().String(), addedCertificate.CertificateId)).
-				ToNot(gomega.Succeed())
-			gomega.Expect(provider.Revoke(addedCertificate.OrganizationId, uuid.New().String())).
+			wrongOrgCertificate := &entities.MonitoringCertificate{
+				OrganizationId: uuid.New().String(),
+				CertificateId:  addedCertificate.CertificateId,
+			}
+			gomega.Expect(provider.Update(wrongOrgCertificate)).ToNot(gomega.Succeed())
+			wrongIdCertificate := &entities.MonitoringCertificate{
+				OrganizationId: addedCertificate.OrganizationId,
+				CertificateId:  uuid.New().String(),
+			}
+			gomega.Expect(provider.Update(wrongIdCertificate)).
 				ToNot(gomega.Succeed())
 		})
 

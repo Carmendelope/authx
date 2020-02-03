@@ -20,7 +20,6 @@ import (
 	"github.com/nalej/authx/internal/app/authx/entities"
 	"github.com/nalej/derrors"
 	"sync"
-	"time"
 )
 
 type CertificatesMonitoringMockup struct {
@@ -73,12 +72,12 @@ func (db *CertificatesMonitoringMockup) List(organizationId string) ([]*entities
 	return list, nil
 }
 
-func (db *CertificatesMonitoringMockup) Revoke(organizationId string, certificateId string) derrors.Error {
-	certificate, err := db.Get(organizationId, certificateId)
+func (db *CertificatesMonitoringMockup) Update(toUpdate *entities.MonitoringCertificate) derrors.Error {
+	_, err := db.Get(toUpdate.OrganizationId, toUpdate.CertificateId)
 	if err != nil {
 		return err
 	}
-	certificate.RevocationTimestamp = time.Now().UnixNano()
+	db.data[toUpdate.OrganizationId][toUpdate.CertificateId] = *toUpdate
 	return nil
 }
 

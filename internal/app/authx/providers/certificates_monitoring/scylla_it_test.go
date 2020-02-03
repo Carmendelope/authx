@@ -73,7 +73,7 @@ var _ = ginkgo.Describe("CertificatesMonitoringScylla", func() {
 	}
 
 	// create a provider and connect it
-	sp := NewMonitoringCertificatesScyllaProvider(scyllaHost, scyllaPort, nalejKeySpace)
+	sp := NewCertificatesMonitoringScyllaProvider(scyllaHost, scyllaPort, nalejKeySpace)
 
 	// disconnect
 	ginkgo.AfterSuite(func() {
