@@ -24,6 +24,7 @@ import (
 	"github.com/nalej/authx/internal/app/authx/handler"
 	"github.com/nalej/authx/internal/app/authx/inventory"
 	"github.com/nalej/authx/internal/app/authx/manager"
+	"github.com/nalej/authx/internal/app/authx/providers/certificates_monitoring"
 	"github.com/nalej/authx/internal/app/authx/providers/credentials"
 	"github.com/nalej/authx/internal/app/authx/providers/device"
 	"github.com/nalej/authx/internal/app/authx/providers/device_token"
@@ -50,6 +51,7 @@ type Providers struct {
 	tokenProvider     token.Token
 	devTokenProvider  device_token.Provider
 	inventoryProvider inventoryProv.Provider
+	certProvider      certificates_monitoring.CertificatesMonitoring
 }
 
 type TokenManagers struct {
@@ -70,6 +72,7 @@ func (s *Service) CreateInMemoryProviders() *Providers {
 		tokenProvider:     token.NewTokenMockup(),
 		devTokenProvider:  device_token.NewDeviceTokenMockup(),
 		inventoryProvider: inventoryProv.NewMockupInventoryProvider(),
+		certProvider:      certificates_monitoring.NewCertificatesMonitoringMockup(),
 	}
 }
 
@@ -87,6 +90,8 @@ func (s *Service) CreateDBScyllaProviders() *Providers {
 			s.Config.ScyllaDBAddress, s.Config.ScyllaDBPort, s.Config.KeySpace),
 		// TODO Use an scylladb provider
 		inventoryProvider: inventoryProv.NewMockupInventoryProvider(),
+		certProvider: certificates_monitoring.NewCertificatesMonitoringScyllaProvider(
+			s.Config.ScyllaDBAddress, s.Config.ScyllaDBPort, s.Config.KeySpace),
 	}
 }
 
@@ -161,7 +166,7 @@ func (s *Service) Run() {
 		log.Fatal().Str("trace", cErr.DebugReport()).Msg("cannot create certificate helper")
 		return
 	}
-	certManager := certificates.NewManager(s.Config, helper)
+	certManager := certificates.NewManager(s.Config, helper, p.certProvider)
 	certHandler := certificates.NewHandler(certManager)
 
 	grpcServer := grpc.NewServer()
