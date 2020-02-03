@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/nalej/authx/internal/app/authx/entities"
 	"github.com/nalej/grpc-authx-go"
+	"github.com/nalej/grpc-common-go"
 	"github.com/nalej/grpc-utils/pkg/conversions"
 	"github.com/rs/zerolog/log"
 )
@@ -47,4 +48,76 @@ func (h *Handler) CreateControllerCert(ctx context.Context, request *grpc_authx_
 		return nil, conversions.ToGRPCError(err)
 	}
 	return pem, nil
+}
+
+// CreateMonitoringClientCertificate creates a new certificate for the monitoring endpoint for the given organization.
+func (h *Handler) CreateMonitoringClientCertificate(ctx context.Context, request *grpc_authx_go.CreateMonitoringClientCertificateRequest) (*grpc_authx_go.CreateMonitoringClientCertificateResponse, error) {
+	err := entities.ValidateCreateMonitoringClientCertificateRequest(request)
+	if err != nil {
+		return nil, conversions.ToGRPCError(err)
+	}
+	response, err := h.manager.CreateMonitoringClientCertificate(request)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("trace", err.DebugReport()).
+			Interface("request", request).
+			Msg("there was an error creating monitoring client certificates")
+		return nil, conversions.ToGRPCError(err)
+	}
+	return response, nil
+}
+
+// ListMonitoringClientCertificates lists all the monitoring certificates of the given organization.
+func (h *Handler) ListMonitoringClientCertificates(ctx context.Context, request *grpc_authx_go.ListMonitoringClientCertificateRequest) (*grpc_authx_go.ListMonitoringClientCertificateResponse, error) {
+	err := entities.ValidateListMonitoringClientCertificateRequest(request)
+	if err != nil {
+		return nil, conversions.ToGRPCError(err)
+	}
+	response, err := h.manager.ListMonitoringClientCertificates(request)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("trace", err.DebugReport()).
+			Interface("request", request).
+			Msg("there was an error listing monitoring client certificates")
+		return nil, conversions.ToGRPCError(err)
+	}
+	return response, nil
+}
+
+// ValidateMonitoringCertificate checks if the given certificate is still valid.
+func (h *Handler) ValidateMonitoringCertificate(ctx context.Context, request *grpc_authx_go.ValidateMonitoringClientCertificateRequest) (*grpc_common_go.Success, error) {
+	err := entities.ValidateMonitoringClientCertificateValidationRequest(request)
+	if err != nil {
+		return nil, conversions.ToGRPCError(err)
+	}
+	response, err := h.manager.ValidateMonitoringCertificate(request)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("trace", err.DebugReport()).
+			Interface("request", request).
+			Msg("there was an error validating monitoring client certificate")
+		return nil, conversions.ToGRPCError(err)
+	}
+	return response, nil
+}
+
+// RevokeMonitoringCertificate revokes the given certificate.
+func (h *Handler) RevokeMonitoringCertificate(ctx context.Context, request *grpc_authx_go.RevokeMonitoringClientCertificateRequest) (*grpc_common_go.Success, error) {
+	err := entities.ValidateRevokeMonitoringClientCertificateRequest(request)
+	if err != nil {
+		return nil, conversions.ToGRPCError(err)
+	}
+	response, err := h.manager.RevokeMonitoringCertificate(request)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("trace", err.DebugReport()).
+			Interface("request", request).
+			Msg("there was an error revoking monitoring client certificate")
+		return nil, conversions.ToGRPCError(err)
+	}
+	return response, nil
 }

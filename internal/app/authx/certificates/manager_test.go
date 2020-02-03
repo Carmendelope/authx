@@ -25,6 +25,7 @@ import (
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"github.com/nalej/authx/internal/app/authx/config"
+	"github.com/nalej/authx/internal/app/authx/providers/certificates_monitoring"
 	"github.com/nalej/grpc-authx-go"
 	"github.com/onsi/ginkgo"
 	"github.com/onsi/gomega"
@@ -66,9 +67,10 @@ func createTestCA() (*x509.Certificate, *rsa.PrivateKey) {
 	return cert, privateKey
 }
 
+var certificatesProvider = certificates_monitoring.NewCertificatesMonitoringMockup()
 var testManager Manager
 
-var _ = ginkgo.Describe("With a manager", func() {
+var _ = ginkgo.Describe("The certificates manager", func() {
 	ginkgo.BeforeSuite(func() {
 		testCA, testPK := createTestCA()
 		helper := &CertHelper{
@@ -78,7 +80,12 @@ var _ = ginkgo.Describe("With a manager", func() {
 
 		emptyCfg := config.Config{}
 
-		testManager = NewManager(emptyCfg, helper)
+		testManager = NewManager(emptyCfg, helper, certificatesProvider)
+	})
+
+	ginkgo.AfterEach(func() {
+		// Clean model after each test
+		gomega.Expect(certificatesProvider.Truncate()).To(gomega.Succeed())
 	})
 
 	ginkgo.It("should be able to generate an edge controller certificate", func() {
@@ -107,4 +114,108 @@ var _ = ginkgo.Describe("With a manager", func() {
 		log.Info().Interface("cert", cert).Msg("result")
 	})
 
+	ginkgo.It("should be able to create a monitoring certificate", func() {
+		request := &grpc_authx_go.CreateMonitoringClientCertificateRequest{
+			OrganizationId: "organization_id",
+		}
+
+		response, err := testManager.CreateMonitoringClientCertificate(request)
+		gomega.Expect(err).To(gomega.Succeed())
+		gomega.Expect(response.ClientCertificate).ToNot(gomega.BeNil())
+		gomega.Expect(response.CaCertificate).ToNot(gomega.BeEmpty())
+
+		monitoringCertificate := response.ClientCertificate
+
+		x509Cert, cErr := tls.X509KeyPair([]byte(monitoringCertificate.Certificate), []byte(monitoringCertificate.PrivateKey))
+		gomega.Expect(cErr).To(gomega.Succeed())
+
+		block, _ := pem.Decode([]byte(monitoringCertificate.Certificate))
+		gomega.Expect(block).ShouldNot(gomega.BeNil())
+
+		cert, perr := x509.ParseCertificate(block.Bytes)
+		gomega.Expect(perr).To(gomega.Succeed())
+
+		log.Info().Interface("cert", x509Cert).Msg("result")
+		log.Info().Interface("cert", cert).Msg("result")
+	})
+
+	ginkgo.It("should be able to list monitoring certificates that belongs to an organization", func() {
+		creationRequest := &grpc_authx_go.CreateMonitoringClientCertificateRequest{
+			OrganizationId: "organization_id",
+		}
+		certNum := 10
+		creationResponseList := make([]*grpc_authx_go.CreateMonitoringClientCertificateResponse, certNum)
+		for i := 0; i < certNum; i++ {
+			response, err := testManager.CreateMonitoringClientCertificate(creationRequest)
+			gomega.Expect(err).To(gomega.Succeed())
+			creationResponseList[i] = response
+		}
+
+		listRequest := &grpc_authx_go.ListMonitoringClientCertificateRequest{
+			OrganizationId: creationRequest.OrganizationId,
+		}
+		listResponse, err := testManager.ListMonitoringClientCertificates(listRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+		gomega.Expect(listResponse.OrganizationId).To(gomega.Equal(creationRequest.OrganizationId))
+		gomega.Expect(listResponse.Certificates).To(gomega.HaveLen(certNum))
+		for _, listedCertificate := range listResponse.Certificates {
+			found := false
+			for _, created := range creationResponseList {
+				if created.CertificateId == listedCertificate.CertificateId {
+					found = true
+				}
+			}
+			gomega.Expect(found).To(gomega.BeTrue())
+		}
+	})
+
+	ginkgo.It("must be able to revoke monitoring certificates", func() {
+		creationRequest := &grpc_authx_go.CreateMonitoringClientCertificateRequest{
+			OrganizationId: "organization_id",
+		}
+		creationResponse, err := testManager.CreateMonitoringClientCertificate(creationRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+
+		revocationRequest := &grpc_authx_go.RevokeMonitoringClientCertificateRequest{
+			OrganizationId: creationRequest.OrganizationId,
+			CertificateId:  creationResponse.CertificateId,
+		}
+		_, err = testManager.RevokeMonitoringCertificate(revocationRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+
+		listRequest := &grpc_authx_go.ListMonitoringClientCertificateRequest{
+			OrganizationId: creationRequest.OrganizationId,
+		}
+		listResponse, err := testManager.ListMonitoringClientCertificates(listRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+		now := time.Now().UnixNano()
+		for _, certificate := range listResponse.Certificates {
+			gomega.Expect(certificate.RevocationTime < now).To(gomega.BeTrue())
+		}
+	})
+
+	ginkgo.It("should be able to validate a certificate correctly", func() {
+		creationRequest := &grpc_authx_go.CreateMonitoringClientCertificateRequest{
+			OrganizationId: "organization_id",
+		}
+		creationResponse, err := testManager.CreateMonitoringClientCertificate(creationRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+
+		validationRequest := &grpc_authx_go.ValidateMonitoringClientCertificateRequest{
+			OrganizationId: creationRequest.OrganizationId,
+			CertificateId:  creationResponse.CertificateId,
+		}
+		_, err = testManager.ValidateMonitoringCertificate(validationRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+
+		revocationRequest := &grpc_authx_go.RevokeMonitoringClientCertificateRequest{
+			OrganizationId: creationRequest.OrganizationId,
+			CertificateId:  creationResponse.CertificateId,
+		}
+		_, err = testManager.RevokeMonitoringCertificate(revocationRequest)
+		gomega.Expect(err).To(gomega.Succeed())
+
+		_, err = testManager.ValidateMonitoringCertificate(validationRequest)
+		gomega.Expect(err).To(gomega.HaveOccurred())
+	})
 })

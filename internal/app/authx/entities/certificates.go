@@ -22,6 +22,12 @@ import (
 	"github.com/nalej/grpc-authx-go"
 )
 
+const (
+	emptyOrganizationId   = "organization_id cannot be empty"
+	emptyEdgeControllerId = "edge_controller_id cannot be empty"
+	emptyCertificateId    = "certificate_id cannot be empty"
+)
+
 // MonitoringCertificate represents the certificate info that is stored.
 type MonitoringCertificate struct {
 	// OrganizationId which the certificate belongs to.
@@ -47,19 +53,55 @@ func NewMonitoringCertificate(organizationId string, certificateId string, creat
 	}
 }
 
+func (o *MonitoringCertificate) ToGRPC() *grpc_authx_go.MonitoringClientCertificate {
+	return &grpc_authx_go.MonitoringClientCertificate{
+		CreationTime:   o.CreationTimestamp,
+		ExpirationTime: o.ExpirationTimestamp,
+		RevocationTime: o.RevocationTimestamp,
+		CertificateId:  o.CertificateId,
+	}
+}
+
 func ValidEdgeControllerCertRequest(request *grpc_authx_go.EdgeControllerCertRequest) derrors.Error {
 	if request.OrganizationId == "" {
-		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+		return derrors.NewInvalidArgumentError(emptyOrganizationId)
 	}
 	if request.EdgeControllerId == "" {
-		return derrors.NewInvalidArgumentError("edge_controller_id cannot be empty")
+		return derrors.NewInvalidArgumentError(emptyEdgeControllerId)
 	}
 	return nil
 }
 
 func ValidateCreateMonitoringClientCertificateRequest(request *grpc_authx_go.CreateMonitoringClientCertificateRequest) derrors.Error {
 	if request.OrganizationId == "" {
-		return derrors.NewInvalidArgumentError("organization_id cannot be empty")
+		return derrors.NewInvalidArgumentError(emptyOrganizationId)
+	}
+	return nil
+}
+
+func ValidateListMonitoringClientCertificateRequest(request *grpc_authx_go.ListMonitoringClientCertificateRequest) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError(emptyOrganizationId)
+	}
+	return nil
+}
+
+func ValidateMonitoringClientCertificateValidationRequest(request *grpc_authx_go.ValidateMonitoringClientCertificateRequest) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError(emptyOrganizationId)
+	}
+	if request.CertificateId == "" {
+		return derrors.NewInvalidArgumentError(emptyCertificateId)
+	}
+	return nil
+}
+
+func ValidateRevokeMonitoringClientCertificateRequest(request *grpc_authx_go.RevokeMonitoringClientCertificateRequest) derrors.Error {
+	if request.OrganizationId == "" {
+		return derrors.NewInvalidArgumentError(emptyOrganizationId)
+	}
+	if request.CertificateId == "" {
+		return derrors.NewInvalidArgumentError(emptyCertificateId)
 	}
 	return nil
 }
